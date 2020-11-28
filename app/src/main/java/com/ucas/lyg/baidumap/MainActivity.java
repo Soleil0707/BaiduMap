@@ -2,7 +2,7 @@ package com.ucas.lyg.baidumap;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import android.view.View;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -15,7 +15,6 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
-//public class MainActivity extends AppCompatActivity implements SensorEventListener {
 public class MainActivity extends AppCompatActivity {
 
     // 定位图层显示方式
@@ -56,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
         //通过LocationClientOption设置LocationClient相关参数
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy); // 高精度定位
         option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(1000);
+        option.setScanSpan(0);
         //设置locationClientOption
         mLocationClient.setLocOption(option);
         //开启地图定位图层
@@ -78,13 +78,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onDestroy() {
-//        mSensorManager.unregisterListener(this);
         mLocationClient.stop();
         mBaiduMap.setMyLocationEnabled(false);
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
         mMapView = null;
         super.onDestroy();
+    }
+
+    /** 点击重新定位位置
+     * */
+    public void resetLocation(View view) {
+        initMap();
     }
 
 
@@ -102,32 +107,11 @@ public class MainActivity extends AppCompatActivity {
                     .longitude(location.getLongitude())
                     .build();
             mBaiduMap.setMyLocationData(myLocationData);
-            if (isFirstLoc) {
-                isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                MapStatus.Builder builder = new MapStatus.Builder();
-                builder.target(ll).zoom(20.0f);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
 
-                if (location.getLocType() == BDLocation.TypeGpsLocation) {
-                    // GPS定位结果
-                    Toast.makeText(getApplicationContext(), location.getAddrStr(), Toast.LENGTH_LONG).show();
-                } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-                    // 网络定位结果
-                    Toast.makeText(getApplicationContext(), location.getAddrStr(), Toast.LENGTH_LONG).show();
-                } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
-                    // 离线定位结果
-                    Toast.makeText(getApplicationContext(), location.getAddrStr(), Toast.LENGTH_LONG).show();
-                } else if (location.getLocType() == BDLocation.TypeServerError) {
-                    Toast.makeText(getApplicationContext(), "服务器错误，请检查是否具有位置权限", Toast.LENGTH_LONG).show();
-                } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-                    Toast.makeText(getApplicationContext(), "网络错误，请检查是否联网", Toast.LENGTH_LONG).show();
-                } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-                    Toast.makeText(getApplicationContext(), "定位错误，请检查是否具有位置权限", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "其他类型", Toast.LENGTH_LONG).show();
-                }
-            }
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            MapStatus.Builder builder = new MapStatus.Builder();
+            builder.target(ll).zoom(20.0f);
+            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
     }
 

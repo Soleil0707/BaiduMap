@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,5 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
+    
+    <ImageButton
+        android:visibility="visible"
+        android:id="@+id/location"
+        android:onClick="resetLocation"
+        android:background="@drawable/ic_location"
 
-</LinearLayout>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+</RelativeLayout>
