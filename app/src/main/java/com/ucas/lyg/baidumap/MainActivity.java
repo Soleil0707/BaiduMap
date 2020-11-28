@@ -3,6 +3,7 @@ package com.ucas.lyg.baidumap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationClient mLocationClient = null;
 
     private MyLocationData myLocationData;
-    private boolean isFirstLoc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         mBaiduMap = mMapView.getMap();
 
         initMap();
-
+        Toast.makeText(getApplicationContext(), "如果发现定位位置错误，请前往设置主动打开定位权限", Toast.LENGTH_SHORT).show();
     }
 
     private void initMap() {
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
      * */
     public void resetLocation(View view) {
         initMap();
+        Toast.makeText(getApplicationContext(), "如果发现定位位置错误，请前往设置主动打开定位权限", Toast.LENGTH_SHORT).show();
     }
 
 
